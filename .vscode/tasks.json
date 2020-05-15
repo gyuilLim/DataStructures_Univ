@@ -27,6 +27,20 @@
             "options": {
                 "cwd": "C:/minGW/mingw32/bin"
             }
+        },
+        {
+            "type": "shell",
+            "label": "cpp.exe build active file",
+            "command": "C:\\minGW\\mingw32\\bin\\cpp.exe",
+            "args": [
+                "-g",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "C:\\minGW\\mingw32\\bin"
+            }
         }
     ],
     "version": "2.0.0"
