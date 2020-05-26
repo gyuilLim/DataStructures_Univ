@@ -2,20 +2,6 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "gcc.exe build active file",
-            "command": "C:\\minGW\\mingw32\\bin\\gcc.exe",
-            "args": [
-                "-g",
-                "${file}",
-                "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
-            ],
-            "options": {
-                "cwd": "C:\\minGW\\mingw32\\bin"
-            }
-        },
-        {
-            "type": "shell",
             "label": "g++.exe build active file",
             "command": "C:/minGW/mingw32/bin/g++.exe",
             "args": [
@@ -26,20 +12,6 @@
             ],
             "options": {
                 "cwd": "C:/minGW/mingw32/bin"
-            }
-        },
-        {
-            "type": "shell",
-            "label": "cpp.exe build active file",
-            "command": "C:\\minGW\\mingw32\\bin\\cpp.exe",
-            "args": [
-                "-g",
-                "${file}",
-                "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
-            ],
-            "options": {
-                "cwd": "C:\\minGW\\mingw32\\bin"
             }
         }
     ],

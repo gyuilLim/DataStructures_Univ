@@ -48,7 +48,7 @@ void bfs();
 int mazeLength();
 
 int main() {
-    making_path();
+   making_path();
    printMap();
 
    return 0;
@@ -337,6 +337,66 @@ void making_path(){
       }
       locQueue.pop();
    }
+   while (locQueue.empty() == false){
+      e = false;
+      Try = 0;
+      Location2D node = locQueue.front();
+      x = node.row; y = node.col;
+      while (!e){
+         random = rand() % 10;
+         switch(random){
+            case 0:
+            case 1: // up
+               p_next = pathableNext(x-1, y, _x, _y);
+               if (p_next == true){
+                  map[x-1][y] = 1;
+                  _x = x; _y = y;
+                  x = x - 1;
+                  locQueue.push(Location2D(x,y));
+               }
+               break;
+            case 2:
+            case 3:
+            case 4: // down
+               p_next = pathableNext(x+1, y, _x, _y);
+               if (p_next == true){
+                  map[x+1][y] = 1;
+                  _x = x; _y = y;
+                  x = x + 1;
+                  locQueue.push(Location2D(x,y));
+               }
+               break;
+            case 5: // left
+               p_next = pathableNext(x, y-1, _x, _y);
+               if (p_next == true){
+                  map[x][y-1] = 1;
+                  _x = x; _y = y;
+                  y = y - 1;
+                  locQueue.push(Location2D(x,y));
+               }
+               break;
+            case 6:
+            case 7:
+            case 8:
+            case 9: // right
+               p_next = pathableNext(x, y+1, _x, _y);
+               if (p_next == true){
+                  map[x][y+1] = 1;
+                  _x = x; _y = y;
+                  y = y + 1;
+                  locQueue.push(Location2D(x,y));
+               }
+               break;
+         }
+         e = isEnd(x, y);
+         Try++;
+         if (Try > 100){
+            break;
+         }
+         Sleep(1);
+      }
+      locQueue.pop();
+   }
    setExit();
    end = clock();
    cout << "미로 생성 시간 : " << (double)(end - begin) << "ms" << endl;
@@ -388,8 +448,6 @@ void bfs(){
 }
 
 void dfs(){
-   clock_t begin, end;
-   begin = clock();
    stack<Location2D> locStack;                
    Location2D entry(0,0);                    
    locStack.push( entry );                    
@@ -413,8 +471,6 @@ void dfs(){
       }
    }
    cout << "탈출에 실패했습니다\n";
-   end = clock();
-   cout << "dfs begin time : " << begin << '\n' << "dfs end time : " << end << "ms" << endl;
    return;
 }
 
