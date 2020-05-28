@@ -235,13 +235,147 @@ class WGraphMST : public WGraph{
     }
 };
 
+class WgraphDijkstra : public WGraph{
+    protected:
+        int path[MAX_VTXS];
+        int dist[MAX_VTXS];
+        bool found[MAX_VTXS];
+    public:
+        WgraphDijkstra(){}
+        ~WgraphDijkstra(){}
+
+        void PrintDistance(){
+            for (int i = 0; i < size; i++){
+                cout << dist[i] << " ";
+            }
+        }
+
+        void PrintPath(int start, int end){
+            cout << "shortest path " << getVertex(end) << "->" << getVertex(start) << " : ";
+            cout << getVertex(end);
+            while (path[end] != start){
+                cout << "-" << getVertex(path[end]);
+                end = path[end];
+            }
+            cout << "-" << getVertex(start) << "\n";
+        }
+
+        int chooseVertex(){
+            int min = INF;
+            int minpos = -1;
+            for (int i = 0; i < size; i++){
+                if(dist[i] < min && !found[i]){
+                    min = dist[i];
+                    minpos = i;
+                }
+            }
+            return minpos;
+        }
+
+        void ShortestPath(int start){
+            for (int i = 0; i < size; i++){
+                dist[i] = getEdge(start, i);
+                path[i] = start;
+                found[i] = false;
+            }
+            found[start] = true;
+            dist[start] = 0;
+
+            for (int i = 0; i < size; i++){
+                cout << "STEP " << i+1 << " ";
+                PrintDistance();
+                int u = chooseVertex();
+                found[u] = true;
+                for (int w = 0; w < size; w++){
+                    if (!found[w]){
+                        if (dist[u] + getEdge(u, w) < dist[w]){
+                            dist[w] = dist[u] +getEdge(u,w);
+                            path[w] = u;
+                        }
+                    }
+                }
+                cout << "\n";
+            }
+
+        }
+
+};
+
+class WgraphFloyd : public WGraph{
+    protected:
+        int A[MAX_VTXS][MAX_VTXS];
+        int path[MAX_VTXS][MAX_VTXS];
+    
+    public:
+        void ShortestPathFloyd(){
+            for (int i = 0; i < size; i++){
+                for (int j = 0; j < size; j++){
+                    A[i][j] = getEdge(i, j);
+                    path[i][j] = j;
+                }
+            }
+            for (int k = 0; k < size; k++){
+                for (int i = 0; i < size; i++){
+                    for (int j = 0; j < size; j++){
+                        if (A[i][k] + A[k][j] < A[i][j]){
+                            A[i][j] = A[i][k] + A[k][j];
+                            path[i][j] = path[i][k];
+                        }
+                    }
+                }
+                printA();
+            }
+        }
+
+        void printA(){
+            cout << "Shortest path length matrix : \n";
+            for (int i = 0; i < size; i++){
+                for (int j = 0; j < size; j++){
+                    if (A[i][j] == INF){
+                        cout << "INF " ;
+                    }
+                    else {
+                        cout << A[i][j] << " ";
+                    }
+                }
+            }
+        }
+
+        void PrintPath(int start, int end){
+            cout << "shortest path " << getVertex(start) << "->" << getVertex(end) << " : ";
+            cout << getVertex(start);
+            while (path[start][end] != end){
+                cout << "-" << getVertex(path[start][end]);
+                start = path[start][end];
+            }
+            cout << "-" << getVertex(end) << "\n";
+        }
+
+
+};
+
 
 int main() {
-    WGraphMST g;
-    g.load("graph.txt");
-    g.display();
+    WgraphDijkstra g1;
+    g1.load("graph.txt");
+    g1.display();
+    cout << "shortest path by dijkstra algorithm\n";
+    g1.ShortestPath(0);
+    for (int i = 0; i < 7; i++){
+        g1.PrintPath(0, i);
+    }
+    
 
-    g.Prim();
+    WgraphFloyd g2;
+    g2.load("Graph.txt");
+    g2.display();
+    cout << "Shortest path by floyd algorithm\n";
+    g2.ShortestPathFloyd();
+
+    for (int i = 0; i < 7; i++){
+        g1.PrintPath(0,i);
+        g2.PrintPath(i,0);
+    }
 
     return 0;
 }
